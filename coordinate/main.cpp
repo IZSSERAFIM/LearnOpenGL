@@ -24,6 +24,10 @@ const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 600;
 
 const char* glsl_version = "#version 330";
+ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+float view_x = 0.0f;
+float view_y = 0.0f;
+float view_z = -3.0f;
 
 int main()
 {
@@ -228,11 +232,15 @@ int main()
 		ImGui::NewFrame();
 		ImGui::Begin("panel");// Create a window called "panel" and append into it.
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
+		ImGui::SliderFloat("x", &view_x, -10.0f, 10.0f);
+		ImGui::SliderFloat("y", &view_y, -10.0f, 10.0f);
+		ImGui::SliderFloat("z", &view_z, -10.0f, 10.0f);
+		ImGui::ColorEdit3("clear color", (float*)&clear_color);
 		ImGui::End();
 
 		// render
 		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // also clear the depth buffer now!
 
 		// bind textures on corresponding texture units
@@ -249,7 +257,7 @@ int main()
 		glm::mat4 view = glm::mat4(1.0f);
 		glm::mat4 projection = glm::mat4(1.0f);
 		model = glm::rotate(model, (float)glfwGetTime(), glm::vec3(0.5f, 1.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));// 注意，我们将矩阵向我们要进行移动场景的反方向移动。
+		view = glm::translate(view, glm::vec3(view_x, view_y, view_z));// 注意，我们将矩阵向我们要进行移动场景的反方向移动。
 		projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		// retrieve the matrix uniform locations
 		unsigned int modelLoc = glGetUniformLocation(ourShader.ID, "model");
