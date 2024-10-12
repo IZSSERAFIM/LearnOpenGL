@@ -247,7 +247,7 @@ int main()
 		ImGui::NewFrame();
 		ImGui::Begin("panel");// Create a window called "panel" and append into it.
 		ImGui::Text("Application average %.3f ms/frame (%.1f FPS)", 1000.0f / io.Framerate, io.Framerate);
-		ImGui::Checkbox("Lock Cursor(short cut: L)", &lockCursor);
+		ImGui::Checkbox("Lock Cursor(Shortcut: L)", &lockCursor);
 		ImGui::ColorEdit3("clear color", (float*)&clear_color);
 		ImGui::End();
 
