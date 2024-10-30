@@ -169,12 +169,14 @@ int main()
 	// -----------------------------------------------------------------------------
 	unsigned int diffuseMap = loadTexture("container2.png");
 	unsigned int specularMap = loadTexture("container2_specular.png");
+	unsigned int emissionMap = loadTexture("matrix.jpg");
 
 	// shader configuration
 	// --------------------
 	lightingShader.use();
 	lightingShader.setInt("material.diffuse", 0);
 	lightingShader.setInt("material.specular", 1);
+	lightingShader.setInt("material.emission", 2);
 
 
 	// render loop
@@ -233,6 +235,9 @@ int main()
 		// bind specular map
 		glActiveTexture(GL_TEXTURE1);
 		glBindTexture(GL_TEXTURE_2D, specularMap);
+		// bind emission map
+		glActiveTexture(GL_TEXTURE2);
+		glBindTexture(GL_TEXTURE_2D, emissionMap);
 
 		// render containers
 		glBindVertexArray(cubeVAO);
@@ -244,6 +249,9 @@ int main()
 			float angle = 20.0f * i;
 			model = glm::rotate(model, glm::radians(angle), glm::vec3(1.0f, 0.3f, 0.5f));
 			lightingShader.setMat4("model", model);
+
+			float factor = glfwGetTime();
+			lightingShader.setFloat("factor", -factor * 0.3f);
 
 			glDrawArrays(GL_TRIANGLES, 0, 36);
 		}
